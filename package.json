@@ -18,7 +18,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/common/db/ormconfig.datasource.ts",
+    "db:drop": "npm run typeorm schema:drop",
+    "db:create": "npm run typeorm migration:generate src/common/db/migrations/CreateQubiWithRelation",
+    "db:migrate": "npm run typeorm  migration:run",
+    "db:revert": "npm run typeorm migration:revert",
+    "db:seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/common/db/seed.datasource.ts migration:run"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -51,6 +57,7 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.13",
     "@types/hapi__joi": "^17.1.8",
     "@types/jest": "28.1.8",
