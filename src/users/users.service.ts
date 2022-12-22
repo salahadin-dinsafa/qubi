@@ -24,20 +24,6 @@ export class UsersService {
         private readonly datasource: DataSource
     ) { }
 
-
-
-    async getUserById(id: number): Promise<UserEntity> {
-        let user: UserEntity;
-        try {
-            user = await this.userRepository.findOne({ where: { id } });
-        } catch (error) {
-            throw new UnprocessableEntityException(`${error.message}`)
-        }
-        if (!user)
-            throw new NotFoundException(`User with #id: ${id} not found`);
-        return user;
-    }
-
     async addUser(addUser: SignupType): Promise<UserResponse> {
         let user: UserEntity = await this.authService.findByEmail(addUser.email);
         if (user)
@@ -56,7 +42,7 @@ export class UsersService {
     }
 
     async getUser(id: number): Promise<UserResponse> {
-        return await this.getUserById(id)
+        return await this.authService.getUserById(id)
             .then(user => this.authService.getBuildUserResponse(user));
     }
 
@@ -70,7 +56,7 @@ export class UsersService {
     }
 
     async updateUser(id: number, updateUser: UpdateUserType): Promise<UserResponse> {
-        let user: UserEntity = await this.getUserById(id);
+        let user: UserEntity = await this.authService.getUserById(id);
         try {
             updateUser.password ?
                 Object.assign(user, { ...updateUser, password: await hash(updateUser.password, 15) }) :
@@ -90,7 +76,7 @@ export class UsersService {
      */
     // todo: cheack if user has not debt
     async removeUser(id: number): Promise<void> {
-        let user: UserEntity = await this.getUserById(id);
+        let user: UserEntity = await this.authService.getUserById(id);
         if (!user.qubi) {
             await this.userRepository.remove(user);
         } else {

@@ -44,7 +44,10 @@ export class UserEntity extends BaseEntity {
     @Column({ default: 0 })
     left_day: number;
 
-    @ManyToOne(() => QubiEntity, qubiEntity => qubiEntity.memebers, { eager: true , onDelete: 'CASCADE'})
+    @Column({ default: 0 })
+    withdraw: number;
+
+    @ManyToOne(() => QubiEntity, qubiEntity => qubiEntity.memebers, { eager: true, onDelete: 'CASCADE' })
     @JoinColumn()
     qubi: QubiEntity;
 }

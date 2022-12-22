@@ -1,25 +1,25 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 
+import { DataSource } from 'typeorm';
+
 import { QubiEntity } from '../qubi/entities/qubi.entity';
 import { QubiService } from '../qubi/qubi.service';
 import { AuthService } from '../auth/auth.service';
 import { UserEntity } from '../users/entities/user.entity';
-import { UsersService } from '../users/users.service';
 import { UserResponse } from '../users/types/user-response.type';
-import { DataSource } from 'typeorm';
 
 @Injectable()
 export class MembershipsService {
     constructor(
         private readonly authService: AuthService,
         private readonly qubiService: QubiService,
-        private readonly userService: UsersService,
         private readonly datasource: DataSource
 
     ) { }
 
+    // todo: consider adding owner tip
     async addUserToQubi(slug: string, userId: number): Promise<UserResponse> {
-        let user: UserEntity = await this.userService.getUserById(userId);
+        let user: UserEntity = await this.authService.getUserById(userId);
         if (user.qubi)
             throw new UnprocessableEntityException(`User with #email: ${user.email} already have qubi`)
         let qubi: QubiEntity = await this.qubiService.getQubiBySlug(slug);
@@ -45,8 +45,9 @@ export class MembershipsService {
         }
     }
 
+    // todo: user don't have debt
     async removeUserQubi(slug: string, userId: number): Promise<UserResponse> {
-        let user: UserEntity = await this.userService.getUserById(userId);
+        let user: UserEntity = await this.authService.getUserById(userId);
         if (!user.qubi)
             throw new UnprocessableEntityException(`User with #email: ${user.email} don't have qubi`);
         let qubi: QubiEntity = await this.qubiService.getQubiBySlug(slug);
@@ -57,6 +58,12 @@ export class MembershipsService {
             await queryRunner.connect();
             await queryRunner.startTransaction();
             user.qubi = null;
+            user.max_day = 0;
+            user.max_many = 0;
+            user.deposited_day = 0;
+            user.deposited_many = 0;
+            user.left_many = 0;
+            user.left_day = 0;
             qubi.userCount -= 1;
 
             await queryRunner.manager.save(user);

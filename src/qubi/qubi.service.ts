@@ -53,7 +53,6 @@ export class QubiService {
 
 
     /** Main Functionality */
-
     async addQubi(createQubi: CreateQubiType): Promise<Qubi> {
         let { amount, duration } = createQubi;
         if (amount)

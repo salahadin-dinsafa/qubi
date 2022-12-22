@@ -1,5 +1,6 @@
 import {
     Injectable,
+    NotFoundException,
     UnauthorizedException,
     UnprocessableEntityException
 } from '@nestjs/common';
@@ -33,6 +34,18 @@ export class AuthService {
         } catch (error) {
             throw new UnprocessableEntityException(`${error.message}`)
         }
+        return user;
+    }
+
+    async getUserById(id: number): Promise<UserEntity> {
+        let user: UserEntity;
+        try {
+            user = await this.userRepository.findOne({ where: { id } });
+        } catch (error) {
+            throw new UnprocessableEntityException(`${error.message}`)
+        }
+        if (!user)
+            throw new NotFoundException(`User with #id: ${id} not found`);
         return user;
     }
 
