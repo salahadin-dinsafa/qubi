@@ -1,16 +1,17 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from '@hapi/joi';
 
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { MembershipsModule } from './memberships/memberships.module';
 import { TransfersModule } from './transfers/transfers.module';
-import { ormConfig } from './common/db/ormconfig.datasource';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import { QubiModule } from './qubi/qubi.module';
+import { OptionalJwtAuthGuard } from './common/guard/optional-jwt.guard';
+import { ormConfig } from './common/db/ormconfig.datasource';
 
 @Module({
   imports: [
@@ -42,6 +43,10 @@ import { QubiModule } from './qubi/qubi.module';
         forbidNonWhitelisted: true,
         transformOptions: { enableImplicitConversion: true }
       })
+    },
+    {
+      provide: APP_GUARD,
+      useClass: OptionalJwtAuthGuard
     }
   ]
 })

@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UserEntity } from '../users/entities/user.entity';
-import { UsersModule } from '../users/users.module';
 import { RolesGuard } from './guards/roles.guard';
 
 @Module({
@@ -20,12 +19,11 @@ import { RolesGuard } from './guards/roles.guard';
         expiresIn: 3600
       },
       secret: process.env.JWT_SECRET
-    }),
-    UsersModule
+    })
   ],
   providers: [AuthService, JwtStrategy, RolesGuard],
   controllers: [AuthController],
-  exports: [JwtStrategy, PassportModule, RolesGuard]
+  exports: [JwtStrategy, PassportModule, RolesGuard, AuthService]
 
 })
 export class AuthModule { }

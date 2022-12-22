@@ -21,7 +21,7 @@ export class QubiEntity extends BaseEntity {
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     startDate: Date;
 
-    @OneToMany(() => UserEntity, userEntity => userEntity.qubi, { eager: false, cascade: true })
+    @OneToMany(() => UserEntity, userEntity => userEntity.qubi, { cascade: ['remove'] })
     memebers: UserEntity[]
 
 

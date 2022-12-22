@@ -13,16 +13,28 @@ import { UsersService } from './users.service';
 import { UserResponse } from './types/user-response.type';
 import { Roles } from './types/roles.type';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
+import { GetUser } from './decorators/get-user.decorator';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 @UseGuards(AuthGuard(), RolesGuard)
 export class UsersController {
-    constructor(private readonly userService: UsersService) { }
+    constructor(
+        private readonly userService: UsersService,
+        private readonly authService: AuthService,
 
+    ) { }
+// todo: pagination
     @Role(Roles.ADMIN)
     @Get()
     getUsers(): Promise<UserResponse[]> {
         return this.userService.getUsers();
+    }
+
+    @Get('current')
+    getCurrentUser(@GetUser() user: UserEntity): UserResponse {
+        return this.authService.getBuildUserResponse(user);
     }
 
     @Role(Roles.ADMIN)

@@ -1,16 +1,17 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { QubiService } from './qubi.service';
 import { QubiController } from './qubi.controller';
+import { QubiService } from './qubi.service';
 import { AuthModule } from '../auth/auth.module';
 import { QubiEntity } from './entities/qubi.entity';
 
 @Module({
   imports: [
-    forwardRef(() => AuthModule),
-    TypeOrmModule.forFeature([QubiEntity])
+    TypeOrmModule.forFeature([QubiEntity]),
+    AuthModule,
+
   ],
   providers: [QubiService],
   controllers: [QubiController],
