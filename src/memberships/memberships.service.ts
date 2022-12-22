@@ -27,7 +27,10 @@ export class MembershipsService {
         try {
             await queryRunner.connect();
             await queryRunner.startTransaction();
-
+            user.max_many = (30 * qubi.amount * qubi.duration);
+            user.max_day = (30 * qubi.duration)
+            user.left_many = user.max_many;
+            user.left_day = user.max_day;
             user.qubi = qubi;
             qubi.userCount += 1;
             await queryRunner.manager.save(user);
