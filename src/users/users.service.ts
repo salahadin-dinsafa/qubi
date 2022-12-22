@@ -1,25 +1,27 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+    Injectable,
+    UnprocessableEntityException, NotFoundException
+} from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import { QubiService } from '../qubi/qubi.service';
+
 import { QubiEntity } from '../qubi/entities/qubi.entity';
-import { QubiResponse } from '../qubi/types/qubi-response.type';
+import { SignupType } from '../auth/types/signup.type';
+import { AuthService } from '../auth/auth.service';
 import { UserEntity } from './entities/user.entity';
 import { UserResponse } from './types/user-response.type';
-import { SignupType } from '../auth/types/signup.type';
-import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { UpdateUserType } from './types/update-user.type';
-import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
+        private readonly datasource: DataSource
     ) { }
 
 
@@ -82,12 +84,33 @@ export class UsersService {
         }
     }
 
+    /**
+     * While deleting user we should have to cheack if the have qubi
+     *  
+     */
+    // todo: cheack if user has not debt
     async removeUser(id: number): Promise<void> {
         let user: UserEntity = await this.getUserById(id);
-        try {
+        if (!user.qubi) {
             await this.userRepository.remove(user);
-        } catch (error) {
-            throw new UnprocessableEntityException(`${error.message}`)
+        } else {
+            let qubi: QubiEntity = user.qubi;
+            const queryRunner = this.datasource.createQueryRunner();
+            try {
+                await queryRunner.connect()
+                await queryRunner.startTransaction();
+
+                qubi.userCount -= 1;
+
+                await queryRunner.manager.save(qubi);
+                await queryRunner.manager.remove(user);
+                await queryRunner.commitTransaction();
+            } catch (error) {
+                await queryRunner.rollbackTransaction();
+                throw new UnprocessableEntityException(`${error.message}`)
+            } finally {
+                await queryRunner.release();
+            }
         }
     }
 }
