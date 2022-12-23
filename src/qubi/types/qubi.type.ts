@@ -4,5 +4,5 @@ export interface Qubi {
     duration: number;
     amount: number;
     userCount: number;
-    left_day: number;
+    left_day: string;
 }

@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/common/db/ormconfig.datasource.ts",
     "db:drop": "npm run typeorm schema:drop",
-    "db:create": "npm run typeorm migration:generate src/common/db/migrations/WithdrawPropertyOnUser",
+    "db:create": "npm run typeorm migration:generate src/common/db/migrations/CreateQubiWithRelation",
     "db:migrate": "npm run typeorm  migration:run",
     "db:revert": "npm run typeorm migration:revert",
     "db:seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/common/db/seed.datasource.ts migration:run"

@@ -106,13 +106,23 @@ export class QubiService {
 
 
     getBuildQubi(qubi: QubiEntity): Qubi {
+        const final: Date = qubi.endDate;
+        const now: Date = new Date();
+
+        let month: number, day: number = 0;
+
+        final.getFullYear() === now.getFullYear() ?
+            month = final.getMonth() - now.getMonth() :
+            month = final.getMonth() - now.getMonth() + 12;
+        day = final.getDate() - now.getDate();
+
+        day < 0 ? day = day + 30 : day = day;
         return {
             id: qubi.id,
             slug: qubi.slug,
             amount: qubi.amount,
             duration: qubi.duration,
-            // todo: calculate left_day
-            left_day: 2222222222222,
+            left_day: `${month}Month : ${day}Day`,
             userCount: qubi.userCount
         }
     }

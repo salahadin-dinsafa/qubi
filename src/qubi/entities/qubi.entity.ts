@@ -1,5 +1,5 @@
 import { UserEntity } from "src/users/entities/user.entity";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'qubis' })
 export class QubiEntity extends BaseEntity {
@@ -21,8 +21,22 @@ export class QubiEntity extends BaseEntity {
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     startDate: Date;
 
+    @Column({ type: 'timestamp' })
+    endDate: Date;
+
     @OneToMany(() => UserEntity, userEntity => userEntity.qubi, { cascade: ['remove'] })
     memebers: UserEntity[]
+
+    @BeforeInsert()
+    insertEndDate() {
+
+        console.log(this.duration);
+        this.endDate = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + this.duration,
+            new Date().getDate(),
+        );
+    }
 
 
 }

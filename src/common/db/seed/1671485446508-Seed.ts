@@ -5,8 +5,12 @@ export class Seed1671485446508 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
-            `INSERT INTO qubis (slug, "userCount") VALUES 
-            ('qubi-1','2')`
+            `INSERT INTO qubis (slug, "userCount", "startDate", "endDate") VALUES 
+            ('qubi-1','2', '2022-11-22 22:38:53.507358', '2022-12-22 22:38:53.507358'),
+            ('qubi-2','0', '2022-12-22 22:38:53.507358', '2023-01-22 22:38:53.507358'),
+            ('qubi-3','0', '2022-11-22 22:38:53.507358', '2022-12-25 22:38:53.507358'),
+            ('qubi-4','0', '2022-11-22 22:38:53.507358', '2022-12-15 22:38:53.507358')
+            `
         );
         await queryRunner.query(
             `INSERT INTO users (firstname, lastname, email, password, role) VALUES 
