@@ -1,4 +1,4 @@
-import { IsIn, IsNumber, IsOptional, Min } from "class-validator";
+import { IsBoolean, IsNumber, IsOptional, Min } from "class-validator";
 
 export class QubiPaginationDto {
     @IsOptional()
@@ -20,8 +20,4 @@ export class QubiPaginationDto {
     @IsNumber()
     @Min(0)
     maxUser: number;
-
-    @IsOptional()
-    @IsIn([true, false])
-    memebership: string;
 }

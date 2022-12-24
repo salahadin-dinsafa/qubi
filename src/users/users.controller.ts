@@ -8,6 +8,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { Role } from '../auth/decorators/role.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { AuthService } from '../auth/auth.service';
 import { SignupDto } from '../auth/dto/signup.dto';
 import { UsersService } from './users.service';
 import { UserResponse } from './types/user-response.type';
@@ -15,7 +16,7 @@ import { Roles } from './types/roles.type';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { GetUser } from './decorators/get-user.decorator';
-import { AuthService } from 'src/auth/auth.service';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -25,11 +26,10 @@ export class UsersController {
         private readonly authService: AuthService,
 
     ) { }
-// todo: pagination
     @Role(Roles.ADMIN)
     @Get()
-    getUsers(): Promise<UserResponse[]> {
-        return this.userService.getUsers();
+    getUsers(@Body() paginationDto: PaginationDto): Promise<UserResponse[]> {
+        return this.userService.getUsers(paginationDto);
     }
 
     @Get('current')

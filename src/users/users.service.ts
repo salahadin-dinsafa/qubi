@@ -14,6 +14,7 @@ import { AuthService } from '../auth/auth.service';
 import { UserEntity } from './entities/user.entity';
 import { UserResponse } from './types/user-response.type';
 import { UpdateUserType } from './types/update-user.type';
+import { PaginationType } from './types/pagination.type';
 
 @Injectable()
 export class UsersService {
@@ -46,10 +47,30 @@ export class UsersService {
             .then(user => this.authService.getBuildUserResponse(user));
     }
 
-    async getUsers(): Promise<UserResponse[]> {
+    async getUsers(pagination: PaginationType): Promise<UserResponse[]> {
+        const { limit, offset, qubi } = pagination;
         try {
-            return (await this.userRepository.find())
+            const queryBuiler =
+                this.datasource
+                    .getRepository(UserEntity)
+                    .createQueryBuilder('users')
+                    .leftJoinAndSelect('users.qubi', 'qubi')
+            if (qubi) {
+                qubi.amount ?
+                    queryBuiler.andWhere('qubi.amount = :amount', { amount: qubi.amount }) :
+                    null;
+                qubi.duration ?
+                    queryBuiler.andWhere('qubi.duration = :duration', { duration: qubi.duration }) :
+                    null
+            }
+
+            limit ? queryBuiler.take(limit) : queryBuiler.take(10);
+            offset ? queryBuiler.skip(offset) : queryBuiler.skip(0);
+
+            return (await queryBuiler.getMany())
                 .map(user => this.authService.getBuildUserResponse(user));
+
+
         } catch (error) {
             throw new UnprocessableEntityException(`${error.message}`)
         }
@@ -74,11 +95,14 @@ export class UsersService {
      * While deleting user we should have to cheack if the have qubi
      *  
      */
-    // todo: cheack if user has not debt
     async removeUser(id: number): Promise<void> {
         let user: UserEntity = await this.authService.getUserById(id);
         if (!user.qubi) {
             await this.userRepository.remove(user);
+        } else if (user.deposited_many > user.withdraw) {
+            throw new UnprocessableEntityException(`User with #id: ${user.id} must take his many`)
+        } else if (user.deposited_many < user.withdraw) {
+            throw new UnprocessableEntityException('User with #id: ${user.id} must pay his debt');
         } else {
             let qubi: QubiEntity = user.qubi;
             const queryRunner = this.datasource.createQueryRunner();

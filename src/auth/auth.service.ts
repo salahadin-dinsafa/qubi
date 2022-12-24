@@ -120,7 +120,7 @@ export class AuthService {
             month = final.getMonth() - now.getMonth() + 12;
         day = final.getDate() - now.getDate();
 
-        day < 0 ? day = day + 30 : day = day;
+        day < 0 ? day = 0 : day = day;
 
         return {
             id: qubi.id,
