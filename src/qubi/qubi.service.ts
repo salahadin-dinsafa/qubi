@@ -76,7 +76,7 @@ export class QubiService {
 
     async getQubi(currentUser: UserEntity, slug: string): Promise<QubiResponse> {
         console.log(new Date());
-        
+
         let qubi: QubiEntity = await this.getQubiBySlug(slug);
         try {
             return this.authService.getBuildQubiResponse(currentUser, qubi);
@@ -137,17 +137,45 @@ export class QubiService {
     /** Helper function */
 
     getBuildQubi(qubi: QubiEntity): Qubi {
-        const final: Date = qubi.endDate;
-        const now: Date = new Date();
+        const f: Date = qubi.endDate;
+        const n: Date = new Date();
+
+        let isExpired: boolean = false;
 
         let month: number, day: number = 0;
 
-        final.getFullYear() === now.getFullYear() ?
-            month = final.getMonth() - now.getMonth() :
-            month = final.getMonth() - now.getMonth() + 12;
-        day = final.getDate() - now.getDate();
+        if (f.getFullYear() > n.getFullYear()) {
+            month = f.getMonth() - n.getMonth() + 12;
+            day = f.getDate() - n.getDate();
+            day < 0 ? day = day + 30 : day = day;
+        }
+        if (f.getFullYear() === n.getFullYear()) {
+            if (f.getMonth() < n.getMonth()) {
+                month = 0;
+                day = 0;
+                isExpired = true;
+            }
+            if (f.getMonth() === n.getMonth()) {
+                month = 0;
+                if (f.getDate() < n.getDate()) {
+                    day = 0;
+                    isExpired = true;
+                } else {
+                    day = f.getDate() - n.getDate();
+                }
+            }
+            if (f.getMonth() > n.getMonth()) {
+                month = f.getMonth() - n.getMonth();
+                day = f.getDate() - n.getDate();
+                day < 0 ? day = day + 30 : day = day;
+            }
 
-        day < 0 ? day = 0 : day = day;
+        }
+        if (f.getFullYear() < n.getFullYear()) {
+            month = 0;
+            day = 0;
+            isExpired = true;
+        }
         return {
             id: qubi.id,
             slug: qubi.slug,

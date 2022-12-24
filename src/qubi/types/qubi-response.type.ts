@@ -6,4 +6,5 @@ export interface QubiResponse {
     userCount: number;
     left_day: string;
     membership: boolean;
+    isExpired: boolean;
 }
