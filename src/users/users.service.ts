@@ -102,7 +102,7 @@ export class UsersService {
         } else if (user.deposited_many > user.withdraw) {
             throw new UnprocessableEntityException(`User with #id: ${user.id} must take his many`)
         } else if (user.deposited_many < user.withdraw) {
-            throw new UnprocessableEntityException('User with #id: ${user.id} must pay his debt');
+            throw new UnprocessableEntityException(`User with #id: ${user.id} must pay his debt`);
         } else {
             let qubi: QubiEntity = user.qubi;
             const queryRunner = this.datasource.createQueryRunner();

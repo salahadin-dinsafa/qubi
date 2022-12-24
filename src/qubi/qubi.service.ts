@@ -75,8 +75,6 @@ export class QubiService {
     }
 
     async getQubi(currentUser: UserEntity, slug: string): Promise<QubiResponse> {
-        console.log(new Date());
-
         let qubi: QubiEntity = await this.getQubiBySlug(slug);
         try {
             return this.authService.getBuildQubiResponse(currentUser, qubi);
@@ -110,7 +108,6 @@ export class QubiService {
     }
 
     async deleteQubi(slug: string): Promise<void> {
-        // todo: now=2022-12-24 final=2022-12-25
         let qubi: QubiEntity = await this.getQubiBySlug(slug);
         const f: Date = qubi.endDate;
         const n: Date = new Date();
