@@ -4,7 +4,7 @@ import {
     Body, Delete, Logger
 } from '@nestjs/common';
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
 import { GetUser } from '../users/decorators/get-user.decorator';
@@ -13,11 +13,14 @@ import { Roles } from '../users/types/roles.type';
 import { QubiPaginationDto } from './dto/qubi-pagination.dto';
 import { Role } from '../auth/decorators/role.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { QubiResponse } from './types/qubi-response.type';
-import { Qubi } from './types/qubi.type';
+import { QubiResponse, QubiResponseObject } from './types/qubi-response.type';
+import { Qubi, QubiObject } from './types/qubi.type';
 import { CreateQubiDto } from './dto/create-qubi.dto';
 import { QubiService } from './qubi.service';
+import { CustomeHttpExceptionResponseObject } from 'src/common/types/http-exception-response.interface';
+import { ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 
+@ApiUnprocessableEntityResponse({ type: CustomeHttpExceptionResponseObject })
 @ApiTags('Qubi')
 @Controller('qubi')
 export class QubiController {
@@ -25,6 +28,8 @@ export class QubiController {
     constructor(private readonly qubiService: QubiService) { }
 
     @ApiOperation({ summary: 'Add Qubi', description: 'Admin adding qubi' })
+    @ApiUnauthorizedResponse({ type: CustomeHttpExceptionResponseObject })
+    @ApiCreatedResponse({ type: QubiObject })
     @UseGuards(AuthGuard(), RolesGuard)
     @Role(Roles.ADMIN)
     @Post()
@@ -34,6 +39,8 @@ export class QubiController {
     }
 
     @ApiOperation({ summary: 'Get Qubi', description: 'Getting a single qubi' })
+    @ApiOkResponse({ type: QubiResponseObject })
+    @ApiNotFoundResponse({ type: CustomeHttpExceptionResponseObject })
     @Get(':slug')
     getQubi(
         @GetUser() user: UserEntity,
@@ -43,6 +50,7 @@ export class QubiController {
     }
 
     @ApiOperation({ summary: 'Getting Qubi', description: 'Getting All Qubi' })
+    @ApiOkResponse({ type: QubiResponseObject, isArray: true })
     @Get()
     getAllQubi(
         @GetUser() user: UserEntity,
@@ -52,6 +60,8 @@ export class QubiController {
         return this.qubiService.getAllQubi(user, paginationDto);
     }
 
+    @ApiNotFoundResponse({ type: CustomeHttpExceptionResponseObject, description: 'Not Found' })
+    @ApiUnauthorizedResponse({ type: CustomeHttpExceptionResponseObject })
     @ApiOperation({ summary: 'Deleting Qubi', description: 'Deleting a single qubi' })
     @UseGuards(AuthGuard(), RolesGuard)
     @Role(Roles.ADMIN)

@@ -21,6 +21,7 @@ async function bootstrap() {
   app.use(morgan('combined', { stream: logStream }));
 
   // todo: link from wikepeda
+  // todo: api link
   const options = new DocumentBuilder()
     .setTitle('Qubi Application')
     .setContact('Salahadin Dinsafa', '', 'salahadindinsafa@gmail.com')

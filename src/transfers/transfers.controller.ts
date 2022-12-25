@@ -5,15 +5,19 @@ import {
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiTags } from '@nestjs/swagger/dist';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger/dist';
 
-import { UserResponse } from '../users/types/user-response.type';
+import { UserResponse, UserResponseObject } from '../users/types/user-response.type';
 import { Roles } from '../users/types/roles.type';
 import { Role } from '../auth/decorators/role.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { TransfersService } from './transfers.service';
 import { TransferDto } from './dto/tranfer.dto';
+import { ApiOkResponse, ApiUnauthorizedResponse, ApiUnprocessableEntityResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { CustomeHttpExceptionResponseObject } from 'src/common/types/http-exception-response.interface';
 
+@ApiUnprocessableEntityResponse({ type: CustomeHttpExceptionResponseObject })
+@ApiUnauthorizedResponse({ type: CustomeHttpExceptionResponseObject })
 @ApiTags('Transfers')
 @Controller('transfers')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -22,6 +26,7 @@ export class TransfersController {
     constructor(private readonly transferService: TransfersService) { }
 
     @ApiOperation({ summary: 'Deposite maney', description: 'User depositing maney' })
+    @ApiCreatedResponse({ type: UserResponseObject, description: 'User added to qubi' })
     @Role(Roles.ADMIN)
     @Post(':userId')
     depositeManey(
@@ -33,6 +38,7 @@ export class TransfersController {
     }
 
     @ApiOperation({ summary: 'Withdraw maney', description: 'User withdraw maney' })
+    @ApiOkResponse({ type: UserResponseObject, description: 'User Removed from qubi' })
     @Role(Roles.ADMIN)
     @Delete(':userId')
     withdrawManey(

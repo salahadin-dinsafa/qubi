@@ -62,8 +62,6 @@ export class AuthService {
             })
             return this.getBuildUserResponse(await user.save());
         } catch (error) {
-            if (error.code === '23505')
-                throw new UnprocessableEntityException(`User with #email: ${signup.email} already exsist`)
             throw new UnprocessableEntityException(`${error.message}`)
         }
     }
