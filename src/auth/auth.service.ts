@@ -95,7 +95,7 @@ export class AuthService {
                 this.getBuildQubiResponse(user, usersQubi);
         }
         delete user.max_day;
-        delete user.max_many;
+        delete user.max_maney;
         delete user.password;
         return {
             ...user,

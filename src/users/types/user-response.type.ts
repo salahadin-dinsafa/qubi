@@ -5,8 +5,8 @@ export interface UserResponse {
     firstname: string;
     lastname: string;
     email: string;
-    deposited_many: number;
-    left_many: number;
+    deposited_maney: number;
+    left_maney: number;
     deposited_day: number;
     left_day: number;
     qubi: QubiResponse

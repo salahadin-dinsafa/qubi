@@ -23,6 +23,7 @@ import { ormConfig } from './common/db/ormconfig.datasource';
         DB_PASSWORD: Joi.required(),
         DB_NAME: Joi.required(),
         JWT_SECRET: Joi.required(),
+        port: Joi.number().default(3000)
       })
     }),
     AuthModule,

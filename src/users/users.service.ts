@@ -99,28 +99,30 @@ export class UsersService {
         let user: UserEntity = await this.authService.getUserById(id);
         if (!user.qubi) {
             await this.userRepository.remove(user);
-        } else if (user.deposited_many > user.withdraw) {
-            throw new UnprocessableEntityException(`User with #id: ${user.id} must take his many`)
-        } else if (user.deposited_many < user.withdraw) {
-            throw new UnprocessableEntityException(`User with #id: ${user.id} must pay his debt`);
-        } else {
-            let qubi: QubiEntity = user.qubi;
-            const queryRunner = this.datasource.createQueryRunner();
-            try {
-                await queryRunner.connect()
-                await queryRunner.startTransaction();
-
-                qubi.userCount -= 1;
-
-                await queryRunner.manager.save(qubi);
-                await queryRunner.manager.remove(user);
-                await queryRunner.commitTransaction();
-            } catch (error) {
-                await queryRunner.rollbackTransaction();
-                throw new UnprocessableEntityException(`${error.message}`)
-            } finally {
-                await queryRunner.release();
-            }
+            return;
         }
+        if (user.deposited_maney > user.withdraw)
+            throw new UnprocessableEntityException(`User with #id: ${user.id} must take his many`)
+        if (user.deposited_maney < user.withdraw)
+            throw new UnprocessableEntityException(`User with #id: ${user.id} must pay his debt`);
+
+        let qubi: QubiEntity = user.qubi;
+        const queryRunner = this.datasource.createQueryRunner();
+        try {
+            await queryRunner.connect()
+            await queryRunner.startTransaction();
+
+            qubi.userCount -= 1;
+
+            await queryRunner.manager.save(qubi);
+            await queryRunner.manager.remove(user);
+            await queryRunner.commitTransaction();
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw new UnprocessableEntityException(`${error.message}`)
+        } finally {
+            await queryRunner.release();
+        }
+
     }
 }

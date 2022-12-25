@@ -27,13 +27,13 @@ export class UserEntity extends BaseEntity {
     role: Roles
 
     @Column({ default: 0 })
-    max_many: number;
+    max_maney: number;
 
     @Column({ default: 0 })
-    deposited_many: number;
+    deposited_maney: number;
 
     @Column({ default: 0 })
-    left_many: number;
+    left_maney: number;
 
     @Column({ default: 0 })
     max_day: number;

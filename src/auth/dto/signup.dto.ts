@@ -1,6 +1,9 @@
-import { IsEnum, IsIn, IsNotEmpty, IsOptional } from "class-validator";
-import { IsEmail, IsString, Matches, MinLength } from "class-validator";
-import { Roles } from "src/users/types/roles.type";
+import { ApiProperty } from "@nestjs/swagger";
+import {
+    IsEmail, IsString, Matches,
+    MinLength, IsNotEmpty
+} from "class-validator";
+
 
 export class SignupDto {
     @IsNotEmpty()
@@ -13,6 +16,9 @@ export class SignupDto {
     @MinLength(3)
     lastname: string;
 
+    @ApiProperty({
+        example: 'a@gmail.com'
+    })
     @IsNotEmpty()
     @IsEmail()
     email: string;
