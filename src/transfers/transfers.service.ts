@@ -23,7 +23,7 @@ export class TransfersService {
         if (amount > user.left_maney)
             throw new UnprocessableEntityException(`User left only ${user.left_maney}`)
         if (amount % user.qubi.amount !== 0)
-            throw new UnprocessableEntityException(`Amount must must feet with qubi amount`);
+            throw new UnprocessableEntityException(`Amount must must feet: ${user.qubi.amount}`);
 
         try {
             // Cheack deposited_maney not excced max_maney
@@ -68,7 +68,7 @@ export class TransfersService {
         if (amount > (user.max_maney - user.withdraw))
             throw new UnprocessableEntityException(`Can't withdraw this much`);
         if (amount % user.qubi.amount !== 0)
-            throw new UnprocessableEntityException(`Amount must must feet with qubi amount`);
+            throw new UnprocessableEntityException(`Amount must must feet: ${user.qubi.amount}`);
 
         try {
             user.withdraw += amount;
