@@ -13,11 +13,11 @@ export class Seed1671485446508 implements MigrationInterface {
             `
         );
         await queryRunner.query(
-            `INSERT INTO users (firstname, lastname, email, password, role) VALUES 
+            `INSERT INTO qubi_users (firstname, lastname, email, password, role) VALUES 
                 ('nure','abadir', 'nure@gmail.com','$2a$15$62WcXQo/PLtcHIi8G1tYT.wnK5G3bWgwn7vMSsUHxBtnwK1X1qtTa','ADMIN')`
         );
         await queryRunner.query(
-            `INSERT INTO users (firstname, lastname, email, password, role, max_maney, left_maney, max_day, left_day, "qubiId") VALUES 
+            `INSERT INTO qubi_users (firstname, lastname, email, password, role, max_maney, left_maney, max_day, left_day, "qubiId") VALUES 
                 ('user1','user1lastname', 'user1@gmail.com',
                 '$2a$15$62WcXQo/PLtcHIi8G1tYT.wnK5G3bWgwn7vMSsUHxBtnwK1X1qtTa','USER',
                 '150',

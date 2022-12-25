@@ -6,7 +6,7 @@ import {
 import { QubiEntity } from "../../qubi/entities/qubi.entity";
 import { Roles } from "../types/roles.type";
 
-@Entity({ name: 'users' })
+@Entity({ name: 'qubi_users' })
 export class UserEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
