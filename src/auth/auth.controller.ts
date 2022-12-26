@@ -21,14 +21,14 @@ export class AuthController {
     @ApiCreatedResponse({ type: UserResponseObject })
     @Post('signup')
     signup(@Body() signupDto: SignupDto): Promise<UserResponse> {
-        this.logger.verbose(`User signing up with #signupDto: ${signupDto}`)
+        this.logger.verbose(`User signing up with #signupDto: ${JSON.stringify(signupDto)}`)
         return this.authService.signup(signupDto)
     }
 
     @ApiOperation({ summary: 'Login', description: 'User Logging in' })
     @Post()
     login(@Body() loginDto: LoginDto): Promise<string> {
-        this.logger.verbose(`User logging up with #loginDto: ${loginDto}`)
+        this.logger.verbose(`User logging up with #loginDto: ${JSON.stringify(loginDto)}`)
         return this.authService.login(loginDto);
     }
 }

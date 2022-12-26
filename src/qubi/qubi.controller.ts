@@ -34,7 +34,7 @@ export class QubiController {
     @Role(Roles.ADMIN)
     @Post()
     addQubi(@Body() createQubiDto: CreateQubiDto): Promise<Qubi> {
-        this.logger.verbose(`Adding Qubi with #createQubiDto: ${createQubiDto}`)
+        this.logger.verbose(`Adding Qubi with #createQubiDto: ${JSON.stringify(createQubiDto)}`)
         return this.qubiService.addQubi(createQubiDto)
     }
 
@@ -56,7 +56,7 @@ export class QubiController {
         @GetUser() user: UserEntity,
         @Query() paginationDto: QubiPaginationDto
     ): Promise<QubiResponse[]> {
-        this.logger.verbose(`Getting All Qubi with #paginationDto: ${paginationDto}`)
+        this.logger.verbose(`Getting All Qubi with #paginationDto: ${JSON.stringify(paginationDto)}`)
         return this.qubiService.getAllQubi(user, paginationDto);
     }
 

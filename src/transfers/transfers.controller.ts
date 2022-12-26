@@ -33,7 +33,7 @@ export class TransfersController {
         @Param('userId', ParseIntPipe) userId: number,
         @Query() transferDto: TransferDto
     ): Promise<UserResponse> {
-        this.logger.verbose(`User with #id: ${userId} depositing maney with transferDto: ${transferDto}`)
+        this.logger.verbose(`User with #id: ${userId} depositing maney with transferDto: ${JSON.stringify(transferDto)}`)
         return this.transferService.depositeManey(userId, transferDto);
     }
 
@@ -45,7 +45,7 @@ export class TransfersController {
         @Param('userId', ParseIntPipe) userId: number,
         @Query() transferDto: TransferDto
     ): Promise<UserResponse> {
-        this.logger.verbose(`User with #id: ${userId} Withdrawing maney with transferDto: ${transferDto}`)
+        this.logger.verbose(`User with #id: ${userId} Withdrawing maney with transferDto: ${JSON.stringify(transferDto)}`)
         return this.transferService.withdrawManey(userId, transferDto);
     }
 }

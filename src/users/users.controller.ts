@@ -39,7 +39,7 @@ export class UsersController {
     @Role(Roles.ADMIN)
     @Get()
     getUsers(@Body() paginationDto: PaginationDto): Promise<UserResponse[]> {
-        this.logger.verbose(`Getting All user with #paginationDto: ${paginationDto}`)
+        this.logger.verbose(`Getting All user with #paginationDto: ${JSON.stringify(paginationDto)}`)
         return this.userService.getUsers(paginationDto);
     }
 
@@ -67,7 +67,7 @@ export class UsersController {
     @Post()
     addUser(
         @Body() addUserDto: SignupDto): Promise<UserResponse> {
-        this.logger.verbose(`Adding user with #addUserDto: ${addUserDto}`);
+        this.logger.verbose(`Adding user with #addUserDto: ${JSON.stringify(addUserDto)}`);
         return this.userService.addUser(addUserDto);
     }
 
@@ -80,7 +80,7 @@ export class UsersController {
         @Body() updateUserDto: UpdateUserDto,
         @Param('id', ParseIntPipe) id: number)
         : Promise<UserResponse> {
-        this.logger.verbose(`Updating user with #updateUserDto: ${updateUserDto}`);
+        this.logger.verbose(`Updating user with #updateUserDto: ${JSON.stringify(updateUserDto)}`);
         return this.userService.updateUser(id, updateUserDto)
     }
 

@@ -29,12 +29,14 @@ export class QubiEntity extends BaseEntity {
 
     @BeforeInsert()
     insertEndDate() {
-        console.log(this.duration);
         this.endDate = new Date(
-            new Date().getFullYear(),
-            new Date().getMonth() + this.duration,
-            // plus owner rate
-            new Date().getDate() + 1,
+            (new Date().getFullYear()),
+            (new Date().getMonth() + this.duration),
+            (new Date().getDate() + 1),
+            (new Date().getHours()),
+            (new Date().getMinutes()),
+            (new Date().getSeconds()),
+            (new Date().getMilliseconds())
         );
     }
 
