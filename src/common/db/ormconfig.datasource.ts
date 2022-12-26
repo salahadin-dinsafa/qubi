@@ -12,7 +12,7 @@ export const ormConfig = (): PostgresConnectionOptions => ({
     database: process.env.DB_NAME,
     entities: [__dirname + '../../../**/*.entity.{js,ts}'],
     migrations: [__dirname + '/migrations/**/*.{js,ts}'],
-    synchronize: false
+    synchronize: true
 })
 
 const datasource: DataSource = new DataSource(ormConfig());
