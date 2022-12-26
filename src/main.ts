@@ -20,7 +20,7 @@ async function bootstrap() {
   logger.verbose('Generating api.log file');
   app.use(morgan('combined', { stream: logStream }));
 
-  
+
   const options = new DocumentBuilder()
     .setTitle('Qubi Application')
     .setContact('Salahadin Dinsafa', '', 'salahadindinsafa@gmail.com')
@@ -30,10 +30,11 @@ async function bootstrap() {
     .setLicense('MIT', 'https://api.openapi.org/MIT')
     .build()
   const document = SwaggerModule.createDocument(app, options);
-  
+
   logger.verbose('Generating Swagger Documentation');
   SwaggerModule.setup('api', app, document);
-  logger.verbose(`Application started at port ${process.env.port}`);
-  await app.listen(+process.env.port);
+  const port: number = +process.env.port || 3000;
+  logger.verbose(`Application started at port ${port}`);
+  await app.listen(port);
 }
 bootstrap();
