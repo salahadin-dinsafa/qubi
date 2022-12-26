@@ -20,14 +20,13 @@ async function bootstrap() {
   logger.verbose('Generating api.log file');
   app.use(morgan('combined', { stream: logStream }));
 
-  // todo: link from wikepeda
-  // todo: api link
+  
   const options = new DocumentBuilder()
     .setTitle('Qubi Application')
     .setContact('Salahadin Dinsafa', '', 'salahadindinsafa@gmail.com')
     .setDescription('Ethiopian Traditional Banking System')
     .setVersion('1.0.0')
-    .setExternalDoc('', '')
+    .setExternalDoc('Hilton Website', 'http://www.tadias.com/v1n6/OP_2_2003-1.html')
     .setLicense('MIT', 'https://api.openapi.org/MIT')
     .build()
   const document = SwaggerModule.createDocument(app, options);
