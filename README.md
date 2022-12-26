@@ -25,7 +25,7 @@ $ npm run start:prod
 ## Stay in touch
 
 - Author - [Salahadin Dinsafa](salahadindinsafa@gmail.com)
-- App Url - [Iquib](https://twitter.com/nestframework)
+- App Url - [qubi](https://qubi.onrender.com/api)
 
 ## License
 
