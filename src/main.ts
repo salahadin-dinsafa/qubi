@@ -13,8 +13,9 @@ import { AllExceptionFilter } from './common/filters/all-exception.filter';
 const logStream: fs.WriteStream = fs.createWriteStream('api.log', { flags: 'a' });
 async function bootstrap() {
   const logger = new Logger('bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {cors: true});
   app.setGlobalPrefix('api');
+  
   app.useGlobalFilters(new AllExceptionFilter);
 
   logger.verbose('Generating api.log file');
